@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        function_name = 'javasample2'
+        function_name = 'samplejava'
     }
 
     stages {
@@ -12,6 +12,14 @@ pipeline {
                 sh 'mvn package'
             }
         }
+        stage("sonarqube analysis") {
+              agent any
+              steps {
+                  withSonarQubeEnv('sonar') {
+                      sh 'mvn clean package sonar:sonar'
+                  }
+              }
+         }
 
         stage('Push') {
             steps {
